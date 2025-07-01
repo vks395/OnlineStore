@@ -1,0 +1,84 @@
+﻿@model IEnumerable<BAL.AllUsers>
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Users</h2>
+<div>
+    @Html.ActionLink("Create New User", "UsersAdd", "Users", null, new { @class = "" })
+</div>
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success" role="alert" id="alertMsg">
+        @TempData["msg"]
+    </div>
+}
+@Html.Partial("_CommonPopup")
+<div>
+    <table class="table-bordered table-responsive bg-dark text-center" width="100%" id="myTable">
+        <thead>
+            <tr>
+                <td>User Id</td>
+                <td>User Name</td>
+                <td>Role</td>
+                <td>Password</td>
+
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.UserId</td>
+                    <td>@item.UserName</td>
+                    <td>@item.RoleName</td>
+                    <td>
+                        <input type="text" class="password" value="@item.Password" readonly>
+                        <button type="button" id="btnPassword" class="btnPassword">
+                            Show Password
+                        </button>
+                    </td>
+
+                    <td>
+
+
+                        <a href="@Url.Action("UsersEdit", "Users",new {UserId = item.UserId })" class="btn btn-info">Edit</a>
+                        @*<a href="@Url.Action("Details", "Users",new {UserId = item.UserId })" class="btn btn-success">Details</a>*@
+                        @*<a href="@Url.Action("UsersDelete", "Users",new {UserId = item.UserId })" class="btn btn-danger">Delete</a>*@
+                        @*<input type="button" onclick="FxDeletion(@item.UserId)" value="delete" />*@
+
+                        <button class="btn btn-danger btndelete" type="button" value="@item.UserId">Delete</button>
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+
+
+        $(document).ready(() => {
+            $(".btndelete").on("click", function () {
+                var UserId = $(this).val();
+                $("#linkDeletebtn").attr("href", "https://localhost:44303/Users/UsersDelete?UserId=" + UserId)
+                $("#PopUpdeleteConfirmId").modal("show");
+            });
+
+            $("#myTable tbody tr td").find(".password").attr("type", "password");
+            $(".btnPassword").on("click", function () {
+                $(this).toggleClass("active");
+                if ($(this).hasClass("active")) {
+                    $(this).text("Hide Password").prev("input").attr("type", "text");
+                } else {
+                    $(this).text("Show Password").prev("input").attr("type", "password");
+                }
+            });
+        });
+    </script>
+}

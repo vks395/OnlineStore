@@ -1,0 +1,22 @@
+﻿.holder {
+    height: 200px;
+    width: 200px;
+    border: 2px solid black;
+}
+
+img {
+    max-width: 200px;
+    max-height: 200px;
+    min-width: 200px;
+    min-height: 200px;
+}
+
+input[type="file"] {
+    margin-top: 5px;
+}
+
+.heading {
+    font-family: Montserrat;
+    font-size: 45px;
+    color: green;
+}

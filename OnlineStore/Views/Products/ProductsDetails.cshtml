@@ -1,0 +1,136 @@
+﻿@model IEnumerable<OnlineStore.Models.ProductVM>
+@{
+    ViewBag.Title = "Products";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Products</h2>
+<div>
+    @Html.ActionLink("Create New Product", "ProductsAdd", "Products", null, new { @class = "" })
+</div>
+
+
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success" role="alert" id="alertMsg">
+        @TempData["msg"]
+    </div>
+}
+@Html.Partial("_CommonPopup")
+<div>
+    <table class="table-bordered table-responsive bg-dark text-center" width="100%" id="myTable">
+        <thead>
+            <tr>
+                <td>Product Id</td>
+                <td>Product Name</td>
+                <td>Description</td>
+                <td>Price</td>
+                <td>Image</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                string path = "";
+                if (!string.IsNullOrEmpty(item.ImagePath))
+                {
+                    path = item.ImagePath.Replace(@"C:\Users\Vicky Kumar Sharma\source\repos\OnlineStore\OnlineStore\", "https://localhost:44303/");
+                }
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.ProductName</td>
+                    <td>@item.Description</td>
+                    <td>@item.Price</td>
+                    <td>
+                        @if (path != "")
+                        {
+                            <a href="@path" target="_blank"> <img src="@path" name="ProductName" height="50px" width="50px" title="click to open" /></a>
+                        }
+                        else
+                        {
+                            <p>No Image</p>
+                        }
+
+                    </td>
+                    <td>
+
+
+                        <a href="@Url.Action("ProductsEdit", "Products",new {ProductId = item.ProductId })" class="btn btn-info">Edit</a>
+                        @*<a href="@Url.Action("Details", "Products",new {ProductId = item.ProductId })" class="btn btn-success">Details</a>*@
+                        @*<a href="@Url.Action("ProductsDelete", "Products",new {ProductId = item.ProductId })"  class="btn btn-danger">Delete</a>*@
+                        <button class="btn btn-danger btndelete" type="button" value="@item.ProductId">Delete</button>
+                        @*<input onclick="fxdelete(@item.ProductId)" value="Delete" type="button"/>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <script>
+
+
+        $(document).ready(() => {
+            $(".btndelete").on("click", function () {
+                var ProductId = $(this).val();
+                $("#linkDeletebtn").attr("href", "https://localhost:44303/Products/ProductsDelete?ProductId=" + ProductId)
+                $("#PopUpdeleteConfirmId").modal("show");
+            });
+
+
+        });
+    </script>
+}
+@*<script>
+        function fxdelete(ProductId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/Products/deleteProductRecord?ProductId=' + ProductId,
+                        //data: {
+                        //    ProductId: ProductId
+                        //},
+                        type: "POST",
+                        //beforeSend: function () {
+                        //    /* ShowLoader();*/
+                        //},
+                        datatype: "json",
+                        success: function (data) {
+                            if (data.Result == "success") {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                )
+                            }
+                            else {
+                                Swal.fire(
+                                    'Not Found!',
+                                    'Your file has been not deleted.',
+                                    'success'
+                                )
+                            }
+                        },
+                        complete: function () {
+                            /*CloseLoader();*/
+                        }
+                    });
+
+                }
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    location.reload();
+                }
+            })
+        }
+    </script>*@

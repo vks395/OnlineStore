@@ -1,0 +1,76 @@
+﻿
+@model OnlineStore.Models.ProductVM
+
+@{
+    ViewBag.Title = "Products Add";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/CustomCss/common.css" rel="stylesheet" />
+<hr />
+<h2>Create New Product</h2>
+
+<hr />
+@if (TempData["msg"] != null)
+{
+    <div class="alert alert-success" role="alert" id="alertMsg">
+        @TempData["msg"]
+    </div>
+}
+@using (Html.BeginForm("ProductsAdd", "Products", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            @Html.Label("* Product Name", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control", maxlength = 60 })
+                @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Description, new { @class = "form-control", maxlength = 200 })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Price, new { @class = "form-control decimalinput" })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Product Image Upload", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" style="width: 100%;" accept="image/*" />
+
+            </div>
+        </div>
+        <div class="form-group" id="previewdiv">
+            @Html.Label(" Preview Product Image", new { @class = "control-label col-md-2" })
+            <div class=" col-md-10 holder">
+                <img id="imgPreview" src="#" alt="No Pic Preview" />
+            </div>
+        </div>
+        <hr />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Go To Products Details", "ProductsDetails", "Products", null, new { @class = "" })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/CustomJs/common.js"></script>
+}
